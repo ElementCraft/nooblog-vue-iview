@@ -13,11 +13,11 @@
 				&emsp;
 			</div>
 			<div v-if="!login" class="layout-nav" >
-				<MenuItem name="btnRegist">
-					<a href="" @click.prevent="modalRegist = true">注 册</a>
+				<MenuItem name="btnRegist" @click.native.prevent="modalRegist = true">
+					<a href="">注 册</a>
 				</MenuItem>
-				<MenuItem name="btnLogin">
-					<a href="" @click.prevent="modalLogin = true">登 录</a>
+				<MenuItem name="btnLogin" @click.native.prevent="modalLogin = true">
+					<a href="">登 录</a>
 				</MenuItem>
 			</div>
 			<div v-else class="layout-nav">
@@ -30,19 +30,19 @@
                         &nbsp;<a href="javascript:;">{{user.nickName}}</a>
                     </template>
                     <MenuItem name="btnMenu_Console">
-						<router-link to="/">我的控制台</router-link>
+						<router-link to="/user/console/profile" target="_blank"><div>我的控制台</div></router-link>
 					</MenuItem>
 					<MenuItem style="display:block !important;" name="btnBlog_Mobile" mobile>
 						<router-link to="/">我的博客</router-link>
 					</MenuItem>
-                    <MenuItem name="btnMenu_Logout">
-						<a href="" @click.prevent="logout">注销登录</a>
+                    <MenuItem name="btnMenu_Logout" @click.native.prevent="logout">
+						<a href="">注销登录</a>
 					</MenuItem>
                 </Submenu>
 			</div>
 		</Menu>
 		<Row :style="{backgroundColor: (theme === 'dark'? '#495060':'') }">
-			<Col ref="sidebar" :lg="5" :md="8" :sm="0" :xs="0" :style="{height: sidebarHeight + 'px'}">
+			<Col ref="sidebar" :lg="5" :md="6" :sm="0" :xs="0" :style="{height: sidebarHeight + 'px'}" >
 				<Menu width="auto" :theme="theme" :style="{height: sidebarHeight + 'px', paddingLeft:'72px'}">
 					<MenuGroup title="热门搜索关键词">
 						<MenuItem name="keywordMenu_1">
@@ -93,7 +93,7 @@
 			</Col>
 
 			<!-- 主体 -->
-			<Col ref="content" :lg="19" :md="16" :sm="24" :xs="24">
+			<Col ref="content" :lg="19" :md="18" :sm="24" :xs="24">
 
 				<div class="main-content">
 					<router-view/>
@@ -102,7 +102,7 @@
 
 				<div class="footer">
 					<!-- 底部固定区域 -->
-					© 2017 blog.noobug.org 闽ICP备17017285
+					© 2017-2018 blog.noobug.org 闽ICP备17017285
 					<p>转载文章请注明出处</p>
 				</div>
 			</Col>
@@ -117,7 +117,7 @@
 					<Input v-model="formLogin.account" placeholder="请输入帐号..."></Input>
 				</FormItem>
 				<FormItem label="密码">
-					<Input v-model="formLogin.password" placeholder="请输入密码..."></Input>
+					<Input type="password" v-model="formLogin.password" placeholder="请输入密码..."></Input>
 				</FormItem>
 			</Form>
 		</Modal>
@@ -129,7 +129,7 @@ export default {
 	name: 'App',
 	data(){
 		return {
-			theme:"dark",
+			theme: "light",
 			modalLogin: false,
 			modalRegist: false,
 			login: false,
@@ -152,7 +152,10 @@ export default {
 			this.user = this.fixUserInfo(JSON.parse(user));
 		}
 
-		this.fixSidebarHeight();
+		setInterval(()=>{
+			this.fixSidebarHeight();
+		}, 500);
+		
 	},
 	methods:{
 		fixUserInfo(u){
@@ -197,8 +200,8 @@ export default {
 				});
 		},
 		logout() {
-			this.$localStorage.remove("user", null);
-			this.$localStorage.remove("token", null);
+			this.$localStorage.remove("user");
+			this.$localStorage.remove("token");
 
 			this.$router.go();
 		},
@@ -206,7 +209,6 @@ export default {
 			this.theme = this.theme === 'light' ? "dark" : "light";
 		},
 		fixSidebarHeight(){
-			console.log(this.$refs.sidebar.height)
 			this.sidebarHeight = this.$refs.content.$el.offsetHeight
 		}
 	}
@@ -215,7 +217,6 @@ export default {
 
 <style>
 #app {
-	font-family: 'Avenir', Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }

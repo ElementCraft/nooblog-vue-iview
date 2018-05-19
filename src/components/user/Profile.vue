@@ -1,18 +1,20 @@
 <template>
-	<div>
+	<div class="index-content">
 		
 	</div>
 </template>
 
 <script>
 export default {
-	name: 'HelloWorld',
+	name: 'UserCMD_Profile',
 	data () {
 		return {
+			newestArticles:[],
+			greatArticles:[],
+			activelyUsers:[]
 		}
 	},
 	mounted(){
-		var Vue = this;
 		
 	},
 	methods : {
@@ -22,5 +24,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

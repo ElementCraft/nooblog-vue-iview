@@ -26,7 +26,9 @@ if (token) {
 
 new Vue({
 	el: '#app',
-	router,
-	components: { App },
-	template: '<App/>'
+	router: router,
+	components: {
+		App
+	},
+	template: '<router-view />'
 })
