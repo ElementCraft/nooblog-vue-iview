@@ -16,12 +16,19 @@ Vue.use(VueLocalStorage)
 
 Vue.config.productionTip = false
 Vue.http.options.emulateJSON = false;
-Vue.http.options.root = "http://localhost:8081/"
-
+//Vue.http.options.root = "http://localhost:8081/"
+Vue.http.options.root = "http://119.23.149.25:8088/"
 
 var token = Vue.localStorage.get("token");
 if (token) {
 	Vue.http.headers.common['Authorization'] = 'Bearer ' + token;
+}
+
+Vue.prototype.fixUserInfo = function(u){
+	if(u.iconPath){
+		u.iconPath = Vue.http.options.root + u.iconPath;
+	}
+	return u;
 }
 
 new Vue({
