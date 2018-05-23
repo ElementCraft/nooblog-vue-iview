@@ -158,12 +158,6 @@ export default {
 		
 	},
 	methods:{
-		fixUserInfo(u){
-			if(u.iconPath){
-				u.iconPath = this.$http.options.root + u.iconPath;
-			}
-			return u;
-		},
 		formLoginSubmit(){
 			this.$http.post("api/user/login", this.formLogin)
 				.then((res) => {

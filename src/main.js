@@ -24,6 +24,13 @@ if (token) {
 	Vue.http.headers.common['Authorization'] = 'Bearer ' + token;
 }
 
+Vue.prototype.fixUserInfo = function(u){
+	if(u.iconPath){
+		u.iconPath = Vue.http.options.root + u.iconPath;
+	}
+	return u;
+}
+
 new Vue({
 	el: '#app',
 	router: router,

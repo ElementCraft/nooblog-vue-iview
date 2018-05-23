@@ -133,12 +133,6 @@ export default {
 	padding: 16px 16px;
 }
 
-.title-header{
-	padding-left: 8px;
-	padding-bottom: 12px;
-	border-bottom: 1px solid lightgray;
-}
-
 .timeline-newest {
 	padding-top: 24px;
 }
