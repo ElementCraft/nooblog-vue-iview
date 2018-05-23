@@ -67,6 +67,14 @@ div.top-tool {
     display: none !important;
 }
 
+[mobile-block] {
+    display: none !important;
+}
+
+[mobile-inline] {
+    display: none !important;
+}
+
 @media screen and (max-width: 750px) {
     [pc] {
         display: none !important;
@@ -74,5 +82,13 @@ div.top-tool {
 
     [mobile] {
         display: inline-block !important;
+    }
+
+    [mobile-block] {
+        display: block !important;
+    }
+
+    [mobile-inline] {
+        display: inline !important;
     }
 }

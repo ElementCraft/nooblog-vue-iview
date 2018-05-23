@@ -121,12 +121,6 @@ export default {
 		
 	},
 	methods:{
-		fixUserInfo(u){
-			if(u.iconPath){
-				u.iconPath = this.$http.options.root + u.iconPath;
-			}
-			return u;
-		},
 		logout() {
 			this.$localStorage.remove("user");
 			this.$localStorage.remove("token");

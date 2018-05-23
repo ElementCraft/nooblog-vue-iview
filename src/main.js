@@ -4,6 +4,8 @@ import Resource from "vue-resource"
 import router from './router'
 import VueLocalStorage from 'vue-localstorage'
 
+import EditorMDPreview from '@/components/EditorMDPreview'
+
 import iview from "iview"
 import 'iview/dist/styles/iview.css'
 
@@ -13,11 +15,13 @@ Vue.use(Resource)
 Vue.use(LazyLoad)
 Vue.use(iview)
 Vue.use(VueLocalStorage)
+Vue.component("EditorMDPreview", EditorMDPreview)
+
 
 Vue.config.productionTip = false
 Vue.http.options.emulateJSON = false;
-Vue.http.options.root = "http://localhost:8081/"
-//Vue.http.options.root = "http://119.23.149.25:8088/"
+
+Vue.http.options.root = process.env.BASE_URL;
 
 var token = Vue.localStorage.get("token");
 if (token) {
@@ -27,6 +31,8 @@ if (token) {
 Vue.prototype.fixUserInfo = function(u){
 	if(u.iconPath){
 		u.iconPath = Vue.http.options.root + u.iconPath;
+	}else{
+		u.iconPath = "static/images/default_icon.png";
 	}
 	return u;
 }

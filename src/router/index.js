@@ -5,7 +5,7 @@ import App from '@/App'
 import User from '@/User'
 import Index from '@/components/Index'
 // import AdminLogin from '@/components/AdminLogin'
-// import Detail from '@/components/Detail'
+import ArticleDetail from '@/components/ArticleDetail'
 // import UserCMD_Index from '@/components/user/Index'
 import UserCMD_Profile from '@/components/user/Profile'
 // import UserCMD_EditProfile from '@/components/user/EditProfile'
@@ -22,7 +22,7 @@ export default new Router({
 			children: [
 				{ path: '', component: Index },
 				//{ path: 'adminLogin', component: AdminLogin },
-				//{ path: 'article/:id', component: Detail },
+				{ path: 'article/:id', component: ArticleDetail },
 			]
 		},
 		{
