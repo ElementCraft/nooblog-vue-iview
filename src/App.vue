@@ -32,7 +32,7 @@
                     <MenuItem name="btnMenu_Console">
 						<router-link to="/user/console/profile" target="_blank"><div>我的控制台</div></router-link>
 					</MenuItem>
-					<MenuItem style="display:block !important;" name="btnBlog_Mobile" mobile>
+					<MenuItem name="btnBlog_Mobile" mobile-block>
 						<router-link to="/">我的博客</router-link>
 					</MenuItem>
                     <MenuItem name="btnMenu_Logout" @click.native.prevent="logout">
