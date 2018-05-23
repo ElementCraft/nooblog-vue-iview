@@ -5,7 +5,7 @@
 
 			<Timeline class="timeline-newest">
 				<TimelineItem v-for="article in newestArticles" :key="article.id">
-					<p class="title"><router-link to="/">{{article.title}}</router-link></p>
+					<p class="title"><router-link :to="'/article/' + article.id">{{article.title}}</router-link></p>
 					<p class="info">
 						<Row>
 							<Col :lg="6" :md="6" :sm="6" :xs="8">
@@ -34,7 +34,7 @@
 			<h2 class="title-header">热门文章 <small> —— Great Articles</small></h2>
 			<Timeline class="timeline-newest">
 				<TimelineItem v-for="article in greatArticles" :key="article.id">
-					<p class="title"><router-link to="/">{{article.title}}</router-link></p>
+					<p class="title"><router-link :to="'/article/' + article.id">{{article.title}}</router-link></p>
 					<p class="info">
 						<Row>
 							<Col :lg="6" :md="6" :sm="6" :xs="8">

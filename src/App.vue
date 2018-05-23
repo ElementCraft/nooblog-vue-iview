@@ -111,13 +111,40 @@
 			
 		</Row>
 		<!-- 登录模态框 -->
-		<Modal v-model="modalLogin" title="登 录" @on-ok="formLoginSubmit" width="25" loading>
+		<Modal v-model="modalLogin" title="登 录" @on-ok="formLoginSubmit" width="25" :loading="loadingLogin">
 			<Form :model="formLogin" :label-width="40">
 				<FormItem label="帐号">
 					<Input v-model="formLogin.account" placeholder="请输入帐号..."></Input>
 				</FormItem>
 				<FormItem label="密码">
 					<Input type="password" v-model="formLogin.password" placeholder="请输入密码..."></Input>
+				</FormItem>
+			</Form>
+		</Modal>
+
+		<!-- 注册模态框 -->
+		<Modal v-model="modalRegist" title="注 册" @on-ok="formRegistSubmit" width="33" :loading="loadingRegist">
+			<Form :model="formRegist" :label-width="40">
+				<FormItem label="帐号">
+					<Tooltip content="长度限定5-24，不允许空格、纯数字或中文字符" placement="top-start">
+						<Input v-model="formRegist.account" placeholder="请输入帐号..."></Input>
+					</Tooltip>
+				</FormItem>
+				<FormItem label="昵称">
+					<Tooltip content="长度限定1-24" placement="top-start">
+						<Input v-model="formRegist.nickName" placeholder="请输入昵称..."></Input>
+					</Tooltip>
+				</FormItem>
+				<FormItem label="邮箱">
+					<Input v-model="formRegist.email" placeholder="请输入邮箱..."></Input>
+				</FormItem>
+				<FormItem label="密码">
+					<Tooltip content="长度限定5-24，不允许空格" placement="top-start">
+						<Input type="password" v-model="formRegist.password" placeholder="请输入密码..."></Input>
+					</Tooltip>
+				</FormItem>
+				<FormItem label="确认密码">
+					<Input type="password" v-model="formRegist.password2" placeholder="再次输入密码..."></Input>
 				</FormItem>
 			</Form>
 		</Modal>
@@ -132,6 +159,8 @@ export default {
 			theme: "light",
 			modalLogin: false,
 			modalRegist: false,
+			loadingLogin: false,
+			loadingRegist: false,
 			login: false,
 			user: {
 				iconPath: "static/images/default_icon.png",
@@ -140,6 +169,13 @@ export default {
 			formLogin:{
 				account: "",
 				password: ""
+			},
+			formRegist:{
+				account: "",
+				password: "",
+				nickName: "",
+				email: "",
+				password2: ""
 			},
 			sidebarHeight: 1000
 		}
@@ -159,39 +195,87 @@ export default {
 	},
 	methods:{
 		formLoginSubmit(){
-			this.$http.post("api/user/login", this.formLogin)
+			new Promise((resolve, reject)=>{
+				// 请求登录接口
+				this.$http.post("api/user/login", this.formLogin)
 				.then((res) => {
 					let result = res.body;
 
 					if(result.success){
-						this.$localStorage.set("token", result.data);
-						let header = {"Authorization": "Bearer " + result.data};
-
-						// 获取登录用户信息
-						this.$http.get("api/user/info", {headers:header})
-							.then((res) => {
-								let result = res.body;
-								
-								if(result.success){
-									this.$localStorage.set("user", JSON.stringify(result.data));
-									
-									this.modalLogin = false;
-									this.user = this.fixUserInfo(result.data);
-									this.login = true;
-									this.$Message.info("登录成功");
-								}else{
-									this.$Message.error(result.msg);
-								}
-							},
-							(err) => {
-								this.$Message.error("网络异常");
-							});
+						resolve(result);
 					}else{
-						this.$Message.error(result.msg);
+						reject(result.msg);
 					}
 				},(err) => {
-					this.$Message.error("网络异常");
+					reject("网络异常");
 				});
+			}).then((result)=>{
+				// 储存token
+				this.$localStorage.set("token", result.data);
+				let header = {"Authorization": "Bearer " + result.data};
+
+				// 请求用户个人信息
+				this.$http.get("api/user/info", {headers:header})
+				.then((res) => {
+					let result = res.body;
+					
+					if(result.success){
+						this.$localStorage.set("user", JSON.stringify(result.data));
+						
+						this.modalLogin = false;
+						this.user = this.fixUserInfo(result.data);
+						this.login = true;
+						this.$Message.info("登录成功");
+					}else{
+						reject(result.msg);
+					}
+				},
+				(err) => {
+					reject("网络异常");
+				});
+			}).catch((err)=>{
+				this.$Message.error(err);
+				this.loadingLogin = false;
+				this.$nextTick(()=>{
+					this.modalLogin = true;
+				});
+			});
+		},
+		formRegistSubmit(){
+			new Promise((resolve, reject)=>{
+				let d = this.formRegist;
+				if(d.password2 !== d.password){
+					reject("两次输入的密码不一致");
+				}else{
+					resolve();
+				}
+			}).then(()=>{
+				return new Promise((resolve, reject)=>{
+					// 调用注册接口
+					this.$http.post("api/user/reg", this.formRegist)
+					.then((res) => {
+						let result = res.body;
+
+						if(result.success){
+							this.$Message.success("注册成功");
+							setTimeout(()=>{
+								this.modalRegist = false;
+							}, 500);
+						}else{
+							reject(result.msg);
+						}
+
+					},(err) => {
+						reject("网络异常");
+					});
+				});
+			}).catch((err)=>{
+				this.$Message.error(err);
+				this.loadingRegist = false;
+				this.$nextTick(()=>{
+					this.modalRegist = true;
+				});
+			});
 		},
 		logout() {
 			this.$localStorage.remove("user");
@@ -266,4 +350,11 @@ export default {
 	background-color: white;
 }
 
+.ivu-tooltip{
+	display: block;
+}
+
+.ivu-tooltip div{
+	display: block;
+}
 </style>

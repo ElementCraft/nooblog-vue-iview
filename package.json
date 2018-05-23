@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "iview": "^2.14.0-rc.1",
+    "scriptjs": "^2.5.8",
     "vue": "^2.5.2",
     "vue-lazyload": "^1.2.3",
     "vue-localstorage": "^0.6.2",
