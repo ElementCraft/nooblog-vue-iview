@@ -35,21 +35,24 @@
 						<MenuItem name="sidebarMenu_1_1">
 							<Icon type="edit"></Icon> 编辑资料
 						</MenuItem>
-						<MenuItem name="sidebarMenu_1_2">
-							<Icon type="edit"></Icon> 撰写文章
-						</MenuItem>
+						<router-link to="/user/console/newArticle">
+							<MenuItem name="sidebarMenu_1_2">
+								<Icon type="edit"></Icon> 撰写文章
+							</MenuItem>
+						</router-link>
 					</Submenu>
 					<Submenu name="sidebarMenu_2">
 						<template slot="title">
 							<Icon type="ios-paper"></Icon>
 							内容管理
 						</template>
-						<MenuItem name="sidebarMenu_2_1">
-							<router-link to="/user/console/profile">个人资料</router-link>
-						</MenuItem>
-						<MenuItem name="sidebarMenu_2_2">
-							<router-link to="/user/console/articleList">文章管理</router-link>
-						</MenuItem>
+						<router-link to="/user/console/profile">
+							<MenuItem name="sidebarMenu_2_1">个人资料</MenuItem>
+						</router-link>
+						<router-link to="/user/console/articleList">
+							<MenuItem name="sidebarMenu_2_2">文章管理</MenuItem>
+						</router-link>
+						
 						<MenuItem name="sidebarMenu_2_3">评论管理</MenuItem>
 						<MenuItem name="sidebarMenu_2_4">举报管理</MenuItem>
 					</Submenu>
@@ -102,7 +105,7 @@ export default {
 				iconPath: "static/images/default_icon.png",
 				nickName: "游客"
 			},
-			sidebarHeight: 1000
+			sidebarHeight: 1250
 		}
 	},
 	mounted(){

@@ -17,8 +17,6 @@
 		<div class="article-body">
 			<EditorMDPreview :content="articleInfo.content" ref="preview"></EditorMDPreview>
 		</div>
-
-		<EditorMDPreview :content="articleInfo.content" ref="preview"></EditorMDPreview>
 	</div>
 </template>
 

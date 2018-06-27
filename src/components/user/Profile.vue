@@ -100,7 +100,7 @@
 			</Col>
 		</Row>
 
-		
+		<div style="height:250px;"></div>
 	</div>
 </template>
 

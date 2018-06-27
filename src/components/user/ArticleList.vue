@@ -1,26 +1,34 @@
 <template>
 	<div class="index-content">
-		<h2 class="title-header">个人资料 <small> —— Personal Profile</small></h2>
+		<h2 class="title-header">文章管理 <small> —— Article Manager</small></h2>
 		<br>
-		<Table :loading="loading" border :columns="columns" height="450" :data="articles">
+		<Table :loading="loading" border :columns="columns" height="750" :data="articles">
 
 		</Table>
 		<Page class="pager" :total="total" size="small" show-total show-sizer></Page>
+
+		<!-- 预览模态框 -->
+		<Modal v-model="modalPreview" :title="articlePreview.title" width="80" :loading="loadingPreview" class-name="modal-preview" scrollable>
+			<EditorMDPreview :content="contentPreview" ref="preview"></EditorMDPreview>
+		</Modal>
 	</div>
 </template>
 
 <script>
+
 export default {
 	name: 'UserCMD_ArticleList',
 	data () {
 		return {
-			content: "",
-			comPreview: "",
 			loading: true,
 			total: 0,
 			articles: [
 			],
-			columns: []
+			columns: [],
+			modalPreview: false,	// 预览模态框显示状态
+			articlePreview: {},
+			loadingPreview: false,
+			contentPreview: "",
 		}
 	},
 	mounted(){
@@ -48,6 +56,29 @@ export default {
 	methods : {
 		btnDel(param){
 
+		},
+		previewArticle(id){
+			this.loadingPreview = true;
+			this.modalPreview = true;
+
+			this.$http.get("api/article/content/"+id)
+			.then((res) => {
+				var result = res.body;
+				
+				if(result.success){
+					this.contentPreview = result.data;
+					this.$refs.preview.update();
+				}else{
+					this.$Message.error(result.msg);
+				}
+				
+				this.loadingPreview = false;
+			},
+			(err) => {
+				this.loadingPreview = false;
+
+				this.$Message.error("网络异常");
+			});
 		},
 		initColumns(){
 			this.columns = [
@@ -128,7 +159,14 @@ export default {
 								props: {
 									type: 'primary',
 									icon: "eye",
+								},
+								on: {
+									click: () => {
+										this.articlePreview = params.row;
+										this.previewArticle(params.row.id);
+									}
 								}
+								
 							}),
 							h('Button', {
 								props: {
@@ -166,33 +204,17 @@ export default {
 }
 </script>
 
+<style>
+.modal-preview .ivu-modal-body{
+	height: 500px !important;
+	overflow: auto !important;
+}
+</style>
+
+
 <style scoped>
+
 .index-content{
 	padding: 16px 16px;
-}
-
-.card-info{
-	margin-top:12px;
-	font-size: 16px;
-	height: 265px;
-}
-
-.card-info img{
-	width: 100%;
-	height: auto;
-}
-
-.timeline-info {
-	margin-top:16px;
-}
-
-.timeline-info p.title{
-	margin-top: -12px;
-	font-size:  14px;
-	color: #BBB;
-}
-
-.timeline-info p.info{
-	font-size:  16px;
 }
 </style>
